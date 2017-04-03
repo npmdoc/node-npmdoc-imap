@@ -1,17 +1,40 @@
 {
-    "buildNpmdoc":"imap",
+    "author": "kai zhu <kaizhu256@gmail.com>",
+    "buildNpmdoc": "imap",
+    "description": "api documentation for [imap (v0.8.19)](https://github.com/mscdex/node-imap#readme) [![npm package](https://img.shields.io/npm/v/npmdoc-imap.svg?style=flat-square)](https://www.npmjs.org/package/npmdoc-imap) [![travis-ci.org build-status](https://api.travis-ci.org/npmdoc/node-npmdoc-imap.svg)](https://travis-ci.org/npmdoc/node-npmdoc-imap)",
     "devDependencies": {
-        "imap": "*",
         "electron-lite": "kaizhu256/node-electron-lite#alpha",
+        "imap": "*",
         "utility2": "kaizhu256/node-utility2#alpha"
     },
-    "name":"npmdoc-imap",
+    "engines": {
+        "node": ">=4.0"
+    },
+    "homepage": "https://github.com/npmdoc/node-npmdoc-imap",
+    "keywords": [
+        "documentation",
+        "imap"
+    ],
+    "license": "MIT",
+    "main": "lib.npmdoc_imap.js",
+    "name": "npmdoc-imap",
+    "nameAlias": "npmdoc_imap",
+    "nameOriginal": "npmdoc-imap",
+    "os": [
+        "darwin",
+        "linux"
+    ],
     "repository": {
         "type": "git",
         "url": "https://github.com/npmdoc/node-npmdoc-imap.git"
     },
     "scripts": {
-        "build-ci": "utility2 shReadmeTest build_ci.sh"
+        "build-ci": "utility2 shReadmeTest build_ci.sh",
+        "env": "env",
+        "heroku-postbuild": "(set -e; npm install \"kaizhu256/node-utility2#alpha\"; utility2 shDeployHeroku)",
+        "postinstall": "if [ -f npm_scripts.sh ]; then ./npm_scripts.sh postinstall; fi",
+        "start": "(set -e; export PORT=${PORT:-8080}; utility2 start test.js)",
+        "test": "(set -e; export PORT=$(utility2 shServerPortRandom); utility2 test test.js)"
     },
     "version": "0.0.1"
 }
