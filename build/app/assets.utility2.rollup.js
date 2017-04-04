@@ -2683,6 +2683,59 @@ local.templateApidocMd = '\
             // return callback
             return onParallel;
         };
+
+        local.onParallelList = function (options, onEach, onError) {
+        /*
+         * this function will
+         * 1. async-run onEach in parallel,
+         *    with the given options.rateLimit and options.retryLimit
+         * 2. call onError when done
+         */
+            var ii, onEach2, onParallel;
+            onEach2 = function () {
+                while (ii + 1 < options.list.length && onParallel.counter < options.rateLimit) {
+                    ii += 1;
+                    onParallel.ii += 1;
+                    onParallel.remaining -= 1;
+                    onEach({
+                        element: options.list[ii],
+                        ii: ii,
+                        list: options.list,
+                        retry: 0
+                    }, onParallel);
+                }
+            };
+            onParallel = local.onParallel(onError, onEach2, function (error, data) {
+                if (error && data && data.retry < options.retryLimit) {
+                    local.onErrorDefault(error);
+                    data.retry += 1;
+                    setTimeout(function () {
+                        onParallel.counter -= 1;
+                        onEach(data, onParallel);
+                    }, 1000);
+                    return true;
+                }
+            });
+            onParallel.counter += 1;
+            ii = -1;
+            onParallel.ii = -1;
+            onParallel.remaining = options.list.length;
+            options.rateLimit = Number(options.rateLimit) || 4;
+            options.rateLimit = Math.max(options.rateLimit, 3);
+            options.retryLimit = Number(options.retryLimit) || 2;
+            onEach2();
+            onParallel();
+        };
+
+        local.onReadyAfter = function (onError) {
+        /*
+         * this function will call onError when onReadyBefore.counter === 0
+         */
+            local.onReadyBefore.counter += 1;
+            local.taskCreate({ key: 'utility2.onReadyAfter' }, null, onError);
+            local.onResetAfter(local.onReadyBefore);
+            return onError;
+        };
     }());
     switch (local.modeJs) {
 
@@ -2695,7 +2748,6 @@ local.templateApidocMd = '\
          * this function will delete the github file
          * https://developer.github.com/v3/repos/contents/#delete-a-file
          */
-            var onParallel;
             options = { message: options.message, url: options.url };
             local.onNext(options, function (error, data) {
                 switch (options.modeNext) {
@@ -2715,17 +2767,14 @@ local.templateApidocMd = '\
                         return;
                     }
                     // delete tree
-                    onParallel = local.onParallel(options.onNext);
-                    onParallel.counter += 1;
-                    data.forEach(function (element) {
+                    local.onParallelList({ list: data }, function (data, onParallel) {
                         onParallel.counter += 1;
                         // recurse
                         local.contentDelete({
                             message: options.message,
-                            url: element.url
+                            url: data.element.url
                         }, onParallel);
-                    });
-                    onParallel();
+                    }, options.onNext);
                     break;
                 default:
                     onError();
@@ -2952,18 +3001,14 @@ local.templateApidocMd = '\
          * this function will touch options.urlList in parallel
          * https://developer.github.com/v3/repos/contents/#update-a-file
          */
-            var onParallel;
-            onParallel = local.onParallel(onError);
-            onParallel.counter += 1;
-            options.urlList.forEach(function (url) {
+            local.onParallelList({ list: options.urlList }, function (data, onParallel) {
                 onParallel.counter += 1;
                 local.contentTouch({
                     message: options.message,
                     modeErrorIgnore: true,
-                    url: url
+                    url: data.element
                 }, onParallel);
-            });
-            onParallel();
+            }, onError);
         };
         break;
     }
@@ -12012,7 +12057,7 @@ header: '\
 [![NPM](https://nodei.co/npm/{{env.npm_package_name}}.png?downloads=true)](https://www.npmjs.com/package/{{env.npm_package_name}}) \
 \n\
 \n\
-[![apidoc](https://npmdoc.github.io/node-npmdoc-{{env.npm_package_name}}/build/screenCapture.buildNpmdoc.browser._2Fhome_2Ftravis_2Fbuild_2Fnpmdoc_2Fnode-npmdoc-{{env.npm_package_name}}_2Ftmp_2Fbuild_2Fapidoc.html.png)](https://npmdoc.github.io/node-npmdoc-{{env.npm_package_name}}/build..beta..travis-ci.org/apidoc.html) \
+[![apidoc](https://npmdoc.github.io/node-npmdoc-{{env.npm_package_name}}/build/screenCapture.buildNpmdoc.browser._2Fhome_2Ftravis_2Fbuild_2Fnpmdoc_2Fnode-npmdoc-{{env.npm_package_name}}_2Ftmp_2Fbuild_2Fapidoc.html.png)](https://npmdoc.github.io/node-npmdoc-{{env.npm_package_name}}/build/apidoc.html) \
 \n\
 \n\
 ![npmPackageListing](https://npmdoc.github.io/node-npmdoc-{{env.npm_package_name}}/build/screenCapture.npmPackageListing.svg) \
@@ -12308,7 +12353,12 @@ header: '\
                         }, function (error, data) {
                             // validate no error occurred
                             local.assert(!error, error);
-                            local.objectSetOverride(dbRow, JSON.parse(data.responseText));
+                            data = JSON.parse(data.responseText);
+                            Object.keys(data).forEach(function (key) {
+                                if (data[key] !== null) {
+                                    dbRow[key] = data[key];
+                                }
+                            });
                             // ignore extraneous data to save space
                             dbRow.description = null;
                             dbRow.last_build_duration = null;
@@ -13432,8 +13482,8 @@ header: '\
             ii = -1;
             onParallel.ii = -1;
             onParallel.remaining = options.list.length;
-            options.rateLimit = Number(options.rateLimit) || 8;
-            options.rateLimit = Math.max(options.rateLimit, 2);
+            options.rateLimit = Number(options.rateLimit) || 4;
+            options.rateLimit = Math.max(options.rateLimit, 3);
             options.retryLimit = Number(options.retryLimit) || 2;
             onEach2();
             onParallel();
