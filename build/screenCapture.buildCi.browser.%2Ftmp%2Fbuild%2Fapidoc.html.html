@@ -56,6 +56,24 @@
 
         <li>
 
+            <a class="apidocElementLiA" href="#apidoc.element.imap.imap">
+            function <span class="apidocSignatureSpan"></span>imap
+            <span class="apidocSignatureSpan">(config)</span>
+            </a>
+
+        </li>
+
+        <li>
+
+            <a class="apidocElementLiA" href="#apidoc.element.imap.Connection">
+            function <span class="apidocSignatureSpan">imap.</span>Connection
+            <span class="apidocSignatureSpan">(config)</span>
+            </a>
+
+        </li>
+
+        <li>
+
             <a class="apidocElementLiA" href="#apidoc.element.imap.parseHeader">
             function <span class="apidocSignatureSpan">imap.</span>parseHeader
             <span class="apidocSignatureSpan">(str, noDecode)</span>
@@ -67,6 +85,15 @@
 
             <a class="apidocElementLiA" href="#apidoc.element.imap.super_">
             function <span class="apidocSignatureSpan">imap.</span>super_
+            <span class="apidocSignatureSpan">()</span>
+            </a>
+
+        </li>
+
+        <li>
+
+            <a class="apidocElementLiA" href="#apidoc.element.imap.toString">
+            function <span class="apidocSignatureSpan">imap.</span>toString
             <span class="apidocSignatureSpan">()</span>
             </a>
 
@@ -129,10 +156,146 @@
 
     </ol></li>
 
+    <li class="apidocModuleLi"><a href="#apidoc.module.imap.parseHeader">module imap.parseHeader</a><ol>
+
+        <li>
+
+            <a class="apidocElementLiA" href="#apidoc.element.imap.parseHeader.parseHeader">
+            function <span class="apidocSignatureSpan">imap.</span>parseHeader
+            <span class="apidocSignatureSpan">(str, noDecode)</span>
+            </a>
+
+        </li>
+
+    </ol></li>
+
+    <li class="apidocModuleLi"><a href="#apidoc.module.imap.toString">module imap.toString</a><ol>
+
+        <li>
+
+            <a class="apidocElementLiA" href="#apidoc.element.imap.toString.toString">
+            function <span class="apidocSignatureSpan">imap.</span>toString
+            <span class="apidocSignatureSpan">()</span>
+            </a>
+
+        </li>
+
+    </ol></li>
+
 </ol></div>
 
 <div class="apidocSectionDiv">
 <h1><a href="#apidoc.module.imap" id="apidoc.module.imap">module imap</a></h1>
+
+
+    <h2>
+        <a href="#apidoc.element.imap.imap" id="apidoc.element.imap.imap">
+        function <span class="apidocSignatureSpan"></span>imap
+        <span class="apidocSignatureSpan">(config)</span>
+        </a>
+    </h2>
+    <ul>
+    <li>description and source-code<pre class="apidocCodePre">function Connection(config) {
+  if (!(this instanceof Connection))
+    return new Connection(config);
+
+  EventEmitter.call(this);
+
+  config || (config = {});
+
+  this._config = {
+    localAddress: config.localAddress,
+    socket: config.socket,
+    socketTimeout: config.socketTimeout || 0,
+    host: config.host || 'localhost',
+    port: config.port || 143,
+    tls: config.tls,
+    tlsOptions: config.tlsOptions,
+    autotls: config.autotls,
+    user: config.user,
+    password: config.password,
+    xoauth: config.xoauth,
+    xoauth2: config.xoauth2,
+    connTimeout: config.connTimeout || 10000,
+    authTimeout: config.authTimeout || 5000,
+    keepalive: (config.keepalive === undefined || config.keepalive === null
+                ? true
+                : config.keepalive)
+  };
+
+  this._sock = config.socket || undefined;
+  this._tagcount = 0;
+  this._tmrConn = undefined;
+  this._tmrKeepalive = undefined;
+  this._tmrAuth = undefined;
+  this._queue = [];
+  this._box = undefined;
+  this._idle = { started: undefined, enabled: false };
+  this._parser = undefined;
+  this._curReq = undefined;
+  this.delimiter = undefined;
+  this.namespaces = undefined;
+  this.state = 'disconnected';
+  this.debug = config.debug;
+}</pre></li>
+    <li>example usage<pre class="apidocCodePre">n/a</pre></li>
+    </ul>
+
+
+
+    <h2>
+        <a href="#apidoc.element.imap.Connection" id="apidoc.element.imap.Connection">
+        function <span class="apidocSignatureSpan">imap.</span>Connection
+        <span class="apidocSignatureSpan">(config)</span>
+        </a>
+    </h2>
+    <ul>
+    <li>description and source-code<pre class="apidocCodePre">function Connection(config) {
+  if (!(this instanceof Connection))
+    return new Connection(config);
+
+  EventEmitter.call(this);
+
+  config || (config = {});
+
+  this._config = {
+    localAddress: config.localAddress,
+    socket: config.socket,
+    socketTimeout: config.socketTimeout || 0,
+    host: config.host || 'localhost',
+    port: config.port || 143,
+    tls: config.tls,
+    tlsOptions: config.tlsOptions,
+    autotls: config.autotls,
+    user: config.user,
+    password: config.password,
+    xoauth: config.xoauth,
+    xoauth2: config.xoauth2,
+    connTimeout: config.connTimeout || 10000,
+    authTimeout: config.authTimeout || 5000,
+    keepalive: (config.keepalive === undefined || config.keepalive === null
+                ? true
+                : config.keepalive)
+  };
+
+  this._sock = config.socket || undefined;
+  this._tagcount = 0;
+  this._tmrConn = undefined;
+  this._tmrKeepalive = undefined;
+  this._tmrAuth = undefined;
+  this._queue = [];
+  this._box = undefined;
+  this._idle = { started: undefined, enabled: false };
+  this._parser = undefined;
+  this._curReq = undefined;
+  this.delimiter = undefined;
+  this.namespaces = undefined;
+  this.state = 'disconnected';
+  this.debug = config.debug;
+}</pre></li>
+    <li>example usage<pre class="apidocCodePre">n/a</pre></li>
+    </ul>
+
 
 
     <h2>
@@ -232,6 +395,37 @@ msg.once('end', function() {
   EventEmitter.init.call(this);
 }</pre></li>
     <li>example usage<pre class="apidocCodePre">n/a</pre></li>
+    </ul>
+
+
+
+    <h2>
+        <a href="#apidoc.element.imap.toString" id="apidoc.element.imap.toString">
+        function <span class="apidocSignatureSpan">imap.</span>toString
+        <span class="apidocSignatureSpan">()</span>
+        </a>
+    </h2>
+    <ul>
+    <li>description and source-code<pre class="apidocCodePre">toString = function () {
+    return text;
+}</pre></li>
+    <li>example usage<pre class="apidocCodePre">...
+});
+f.on('message', function(msg, seqno) {
+  console.log('Message #%d', seqno);
+  var prefix = '(#' + seqno + ') ';
+  msg.on('body', function(stream, info) {
+    var buffer = '';
+    stream.on('data', function(chunk) {
+      buffer += chunk.<span class="apidocCodeKeywordSpan">toString</span>('utf8');
+    });
+    stream.once('end', function() {
+      console.log(prefix + 'Parsed header: %s', inspect(Imap.parseHeader(buffer)));
+    });
+  });
+  msg.once('attributes', function(attrs) {
+    console.log(prefix + 'Attributes: %s', inspect(attrs, false, 8));
+...</pre></li>
     </ul>
 
 
@@ -583,6 +777,131 @@ msg.once('attributes', function(attrs) {
 });
 msg.once('end', function() {
   console.log(prefix + 'Finished');
+...</pre></li>
+    </ul>
+
+
+</div>
+
+<div class="apidocSectionDiv">
+<h1><a href="#apidoc.module.imap.parseHeader" id="apidoc.module.imap.parseHeader">module imap.parseHeader</a></h1>
+
+
+    <h2>
+        <a href="#apidoc.element.imap.parseHeader.parseHeader" id="apidoc.element.imap.parseHeader.parseHeader">
+        function <span class="apidocSignatureSpan">imap.</span>parseHeader
+        <span class="apidocSignatureSpan">(str, noDecode)</span>
+        </a>
+    </h2>
+    <ul>
+    <li>description and source-code<pre class="apidocCodePre">function parseHeader(str, noDecode) {
+  var lines = str.split(RE_CRLF),
+      len = lines.length,
+      header = {},
+      state = {
+        buffer: undefined,
+        encoding: undefined,
+        consecutive: false,
+        replaces: undefined,
+        curReplace: undefined,
+        remainder: undefined
+      },
+      m, h, i, val;
+
+  for (i = 0; i &lt; len; ++i) {
+    if (lines[i].length === 0)
+      break; // empty line separates message's header and body
+    if (lines[i][0] === '\t' || lines[i][0] === ' ') {
+      if (!Array.isArray(header[h]))
+        continue; // ignore invalid first line
+      // folded header content
+      val = lines[i];
+      if (!noDecode) {
+        if (RE_ENCWORD_END.test(lines[i - 1])
+            &amp;&amp; RE_ENCWORD_BEGIN.test(val)) {
+          // RFC2047 says to *ignore* leading whitespace in folded header values
+          // for adjacent encoded-words ...
+          val = val.substring(1);
+        }
+      }
+      header[h][header[h].length - 1] += val;
+    } else {
+      m = RE_HDR.exec(lines[i]);
+      if (m) {
+        h = m[1].toLowerCase().trim();
+        if (m[2]) {
+          if (header[h] === undefined)
+            header[h] = [m[2]];
+          else
+            header[h].push(m[2]);
+        } else
+          header[h] = [''];
+      } else
+        break;
+    }
+  }
+  if (!noDecode) {
+    var hvs;
+    for (h in header) {
+      hvs = header[h];
+      for (i = 0, len = header[h].length; i &lt; len; ++i)
+        hvs[i] = decodeWords(hvs[i], state);
+    }
+  }
+
+  return header;
+}</pre></li>
+    <li>example usage<pre class="apidocCodePre">...
+var prefix = '(#' + seqno + ') ';
+msg.on('body', function(stream, info) {
+  var buffer = '';
+  stream.on('data', function(chunk) {
+    buffer += chunk.toString('utf8');
+  });
+  stream.once('end', function() {
+    console.log(prefix + 'Parsed header: %s', inspect(Imap.<span class="apidocCodeKeywordSpan">parseHeader</span>(buffer
+)));
+  });
+});
+msg.once('attributes', function(attrs) {
+  console.log(prefix + 'Attributes: %s', inspect(attrs, false, 8));
+});
+msg.once('end', function() {
+  console.log(prefix + 'Finished');
+...</pre></li>
+    </ul>
+
+
+</div>
+
+<div class="apidocSectionDiv">
+<h1><a href="#apidoc.module.imap.toString" id="apidoc.module.imap.toString">module imap.toString</a></h1>
+
+
+    <h2>
+        <a href="#apidoc.element.imap.toString.toString" id="apidoc.element.imap.toString.toString">
+        function <span class="apidocSignatureSpan">imap.</span>toString
+        <span class="apidocSignatureSpan">()</span>
+        </a>
+    </h2>
+    <ul>
+    <li>description and source-code<pre class="apidocCodePre">function toString() { [native code] }</pre></li>
+    <li>example usage<pre class="apidocCodePre">...
+});
+f.on('message', function(msg, seqno) {
+  console.log('Message #%d', seqno);
+  var prefix = '(#' + seqno + ') ';
+  msg.on('body', function(stream, info) {
+    var buffer = '';
+    stream.on('data', function(chunk) {
+      buffer += chunk.<span class="apidocCodeKeywordSpan">toString</span>('utf8');
+    });
+    stream.once('end', function() {
+      console.log(prefix + 'Parsed header: %s', inspect(Imap.parseHeader(buffer)));
+    });
+  });
+  msg.once('attributes', function(attrs) {
+    console.log(prefix + 'Attributes: %s', inspect(attrs, false, 8));
 ...</pre></li>
     </ul>
 
