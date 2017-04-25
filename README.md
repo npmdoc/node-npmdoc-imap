@@ -1,4 +1,7 @@
-# api documentation for  [imap (v0.8.19)](https://github.com/mscdex/node-imap#readme)  [![npm package](https://img.shields.io/npm/v/npmdoc-imap.svg?style=flat-square)](https://www.npmjs.org/package/npmdoc-imap) [![travis-ci.org build-status](https://api.travis-ci.org/npmdoc/node-npmdoc-imap.svg)](https://travis-ci.org/npmdoc/node-npmdoc-imap)
+# npmdoc-imap
+
+#### basic api documentation for  [imap (v0.8.19)](https://github.com/mscdex/node-imap#readme)  [![npm package](https://img.shields.io/npm/v/npmdoc-imap.svg?style=flat-square)](https://www.npmjs.org/package/npmdoc-imap) [![travis-ci.org build-status](https://api.travis-ci.org/npmdoc/node-npmdoc-imap.svg)](https://travis-ci.org/npmdoc/node-npmdoc-imap)
+
 #### An IMAP module for node.js that makes communicating with IMAP servers easy
 
 [![NPM](https://nodei.co/npm/imap.png?downloads=true&downloadRank=true&stars=true)](https://www.npmjs.com/package/imap)
@@ -67,7 +70,8 @@
     "scripts": {
         "test": "node test/test.js"
     },
-    "version": "0.8.19"
+    "version": "0.8.19",
+    "bin": {}
 }
 ```
 
